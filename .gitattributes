@@ -1,0 +1,8 @@
+SillyTavern-Extras filter=lfs diff=lfs merge=lfs -text
+output filter=lfs diff=lfs merge=lfs -text
+speakers filter=lfs diff=lfs merge=lfs -text
+xtts_models filter=lfs diff=lfs merge=lfs -text
+xtts_streaming_audio.bat filter=lfs diff=lfs merge=lfs -text
+xtts_wav2lip.bat filter=lfs diff=lfs merge=lfs -text
+xtts_withoutvideo[[:space:]]original.bat filter=lfs diff=lfs merge=lfs -text
+xtts_withoutvideo.bat filter=lfs diff=lfs merge=lfs -text
