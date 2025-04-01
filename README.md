@@ -1,3 +1,5 @@
+КАЧАЕМ AiDiscord.exe , распаковываем (WinRAR SFX)
+ВНИМАТЕЛЬНО ЧИТАЙТЕ ИНСТРУКЦИЮ ПОЖАЛУЙСТА
 # DiscordAi
 Ai modul for Discord Russian language. Ai модуль для клиента Discord на русском
 !!!ПЕРВЫМ ДЕЛОМ ПРОЧИТАЙТЕ ФАЙЛ login.svo , открыв его блокнотом и выполните инструкции описаниые в нем.
@@ -23,6 +25,7 @@ A:\TALKLLAMAFAST\talk-llama.exe -mw A:\TALKLLAMAFAST\whisper-ggml-large-v3-q4_0.
 !!!ПРОГРАММА ЗАПУСКАЕТСЯ коммандой node pureai.js
 
 !!!ПРОГРАММА БЕЗ ГАРАНТИИ НА РАБОТОСПОСОБНОСТЬ, ТАК ЧТО ЕСЛИ ГЛЮЧИТ ИЛИ ЕСТЬ ВОПРОСЫ, ТО ПИШИТЕ 
-thenestofai@gmail.com БУДЕМ ПРОБОВАТЬ РАЗОБРАТЬСЯ. ПРОСЬБА НЕ БИТЬ БОЛЬНО))))
+thenestofai@gmail.com 
+БУДЕМ ПРОБОВАТЬ РАЗОБРАТЬСЯ. ПРОСЬБА НЕ БИТЬ БОЛЬНО))))
 
 
