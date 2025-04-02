@@ -5,8 +5,8 @@ Ai modul for Discord Russian language. Ai модуль для клиента Dis
 !!!ПЕРВЫМ ДЕЛОМ ПРОЧИТАЙТЕ ФАЙЛ login.svo , открыв его блокнотом и выполните инструкции описаниые в нем.
 
 !!! Программа требует установки TALKLAMAFAST с XTTC и SillyTavern-Extras(https://github.com/Mozer/talk-llama-fast/releases),
-!!! Заменяем установленные каталоги XTTC и SillyTavern-Extra заменить скачаными отсюда обязательно!!! Без этого озвучка работать не будет!
-Запускается отдельно от NodeJs файлы sylly_extras.bat из каталога SillyTavern-Extras а затем xtts_wav2lip.bat из директории XTTC
+!!! Качаем каталог Speakers отсюда https://github.com/Serbosstm/DiscordAi/tree/master, распаковываем и помещаем в папку XTTC и заменяем старую папку скачаной отсюда обязательно!!! Без этого озвучка работать не будет!
+Запускается  затем это всё отдельно от NodeJs. файлы sylly_extras.bat из каталога SillyTavern-Extras а затем xtts_wav2lip.bat из директории XTTC
 устанавливаем
 NODE JS(https://nodejs.org/en/download),
 так же загрузки и установки всех необходимых require, если они не подхватятся автоматически
