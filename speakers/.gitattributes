@@ -1,0 +1,15 @@
+Kurt[[:space:]]Cobain.wav filter=lfs diff=lfs merge=lfs -text
+default.wav filter=lfs diff=lfs merge=lfs -text
+default324.wav filter=lfs diff=lfs merge=lfs -text
+deva1.wav filter=lfs diff=lfs merge=lfs -text
+Kurt[[:space:]]Cobain.json filter=lfs diff=lfs merge=lfs -text
+default000.json filter=lfs diff=lfs merge=lfs -text
+grjazniyubliudok.wav filter=lfs diff=lfs merge=lfs -text
+leo.wav filter=lfs diff=lfs merge=lfs -text
+Google.wav filter=lfs diff=lfs merge=lfs -text
+grjazniyubliudok.json filter=lfs diff=lfs merge=lfs -text
+Google.json filter=lfs diff=lfs merge=lfs -text
+default[[:space:]]MAIN.wav filter=lfs diff=lfs merge=lfs -text
+default.json filter=lfs diff=lfs merge=lfs -text
+deva.json filter=lfs diff=lfs merge=lfs -text
+deva.wav filter=lfs diff=lfs merge=lfs -text
