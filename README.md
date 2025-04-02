@@ -1,4 +1,6 @@
-КАЧАЕМ AiDiscord.exe , распаковываем (WinRAR SFX)
+*** Для ознакомления с кодом смотрите файл PureAi.... там весь код в развернутом виде
+
+КАЧАЕМ AiDiscord.exe (самораспаковывающийся архив) , затем распаковываем (WinRAR SFX).
 ВНИМАТЕЛЬНО ЧИТАЙТЕ ИНСТРУКЦИЮ ПОЖАЛУЙСТА
 # DiscordAi
 Ai modul for Discord Russian language. Ai модуль для клиента Discord на русском
