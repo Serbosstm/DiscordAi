@@ -1,0 +1,416 @@
+//require('dotenv').config();
+const {Client, IntentsBitField, Attachment, GuildMember} = require ('discord.js');
+const axios = require("axios");
+const {Ollama} =require('ollama');
+const child_process = require('child_process');
+const  systemprocess = require('child_process');
+const async=require('async');
+const ollama = new Ollama(
+  { host: "http://localhost:11434/",
+    model: "llama3.2:latest"  });
+const { ollamaOCR, DEFAULT_OCR_SYSTEM_PROMPT} = require ("ollama-ocr");
+const fst = require('node:fs');
+const postData = {
+  param1: 'value1',
+  param2: 'value2'};
+const fs = require('fs');
+let request = require(`request`);
+const { Headers } = require('node-fetch');
+const { channel } = require('diagnostics_channel');
+const { Stream } = require('stream');
+const { json, response, raw } = require('express');
+const { push } = require('langchain/hub');
+const { time, timeStamp, Console } = require('console');
+const { text } = require('node:stream/consumers');
+const { url } = require('node:inspector');
+const { error } = require('node:console');
+const pathToFile = 'mat.txt';
+const pathToFile1 = 'login.svo';
+const data = fs.readFileSync(pathToFile,{encoding:'utf8', flag:'r'});
+const loginds = fs.readFileSync(pathToFile1,{encoding:'utf8', flag:'r'});
+const TOKEN = loginds;
+const TEXT_CHANNEL_ID = '788900287280578574'; 
+var AdamOnline=0;
+var nrmsg=0;
+var msgautor="default";
+var msgtext="default";
+var data1010="EMPTY CASE";
+const client = new Client({
+    intents: [
+        IntentsBitField.Flags.Guilds,
+        IntentsBitField.Flags.GuildMembers,
+        IntentsBitField.Flags.GuildMessages,
+        IntentsBitField.Flags.MessageContent,      
+    ],
+});
+console.log('start ok');
+client.on('ready', async (c) => {
+console.log(`log is as ${c.user.tag}!`);});
+const usermsg= new Array(msgautor.toString+" "+msgtext.toString);     
+const data101='';
+const BotIs=0;
+fst.readFile('\msgtest.txt', 'utf8', (err, data1) => {      
+      if (err) {
+        console.error(err);
+        return;
+      };
+      console.log('Файл текстового лога msgtest.txt загружен ---> OK');                              
+      data1010=data1;
+    });
+
+client.on('messageCreate', (msg) => {
+      //Консоль ПРОВЕРКА ЕСЛИ АВТОР НЕ БОТ
+      console.log('Автор бот? --->> '+msg.author.bot);
+      //Консоль ИМЯ ПОЛЬЗОВАТЕЛЯ
+      console.log('Имя автора --->> '+msg.author.globalName);
+      //Консоль РАЗМЕР КОНТЕНТА
+      console.log('Размер контента - '+msg.content.size);
+      //Консоль РАЗМЕР ВЛОЖЕНИЯ
+      console.log('Размер вложения - '+msg.attachments.size);
+      //Консоль Упомянут ли в сообщении БОТ
+      console.log('Упомянут ли бот в сообщении - '+msg.content.includes('1299787266939555901'));
+      //Консоль Id канала
+      console.log('Id канала - '+msg.channel.id);
+       // Проверяем на то в онлайне или нет Толклама +
+      function talklamacheckOn () { //Функция проверяет включена или нет TalkLama
+            console.log("ADAMSTART= "+AdamOnline.toString());
+            child_process.exec('cmd /c start "" cmd /c serboss.bat', function(){
+            console.log('TalkLama запущена.');
+            AdamOnline=1;
+            });
+      };
+      //Функция проверяет включена или нет TalkLama
+      function talklamacheckOff () { 
+            console.log("ADAMSTOP= "+AdamOnline.toString());
+            child_process.exec('cmd /c start "" unserboss.bat', function(){
+            console.log('TalkLama остановлена.');
+            AdamOnline=0;
+            });                      
+      };
+     // Сохранить текст от пользователя в лог файл msgfile.txt
+      async function AuthorUserTextSave () {
+            msgautor=msg.author.globalName;
+            msgtext=msg.content;
+            console.log('Размер вложенных файлов ---> '+msg.attachments.size);
+            console.log('Автор не PureAi. Author is ---> '+msgautor);
+            usermsg[nrmsg]=(msgautor + msgtext);      
+            console.log('Сообщение номер: '+nrmsg+' Сообщение --->> '+usermsg[nrmsg]);                        
+                  var toffile=("Дата/время:"+msg.createdAt+ " Автор: "+msg.author.globalName+" Cообшение: "+msg.content)+" \n";
+                  fs.appendFile('msgfile.txt',toffile ,(error) => {
+                        if (error) {
+                        console.error(error);
+                        } else {
+                        console.log('Данные записаны в файл.');                                          
+                        };
+                  }); 
+                  nrmsg=nrmsg+1;  
+             //Если нужно чтобы через сколько то сообщений бот отправлял просьбу рассказать новости *nrmsg - по достижению какого количества бот выдаст вопрос
+            if (nrmsg==20) {
+             msg.channel.send('Дорогие друзья, расскажите что вообще творится в Мире? Я локальная модель и хочу знать что происходит и о чем Вы думаете. Пожалуйста. Pure Ai (Adam)')
+            };
+             //Если нужно чтобы через сколько то сообщений бот отправлял просьбу рассказать новости *nrmsg - по достижению какого количества бот выдаст вопрос
+      }; 
+      // Озвучить оправляемый пользователем текст голосом
+      function SayVoiceMessage (voicevar) { 
+      const postData = ({
+            "text": msg.content, //msg.author.globalName + "сказал мне" +
+            "speaker_wav": voicevar,
+            "language": "ru",
+            "reply_part": 0
+            });
+            axios.post('http://localhost:8020/tts_to_audio/', postData)
+            .then(response => {                            
+            console.log('Response:', response.data);    
+            msg.channel.send("PureAi --> Озвучиваем голосом "+voicevar);        
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+      };
+      //Ответить на вопрос пользователся
+      async function AnswerQLlama() {
+      const llmtext=msg.content;
+      console.log ('Function RUN started and Content to remember is ' +msg.content+" \n");
+      const ollama = new Ollama('http://localhost:11434/api/generate -d', msg.content);    
+           const getit = await ollama.generate({  
+           model:"llama3.1:70b",
+           keep_alive: -1, //          -1 Не выгружать Олламу // если 0 то не держать загруженной // если больше 0 от сколько по времени                                
+           prompt:'Ответь на вопрос '+llmtext+ '?', //'Запомни этот текст : '+llmtext +
+           text: llmtext,                              
+           language: "russian",
+           options:{
+           "temperature":0.1,                             
+           "mirostat":1,
+           "mirostat_eta":0.4,
+           "mirostat_tau":2,
+           "num_ctx":1350,
+            "repeat_last_n":128,
+            "top_k":100,
+           "top_p":0.97
+            }
+            });  
+            console.log(msg.content+" \n");                      
+            console.log(getit.response+" \n");                   
+            msg.channel.id='886276495704739930';
+            const TEXT_CHANNEL_ID = '886276495704739930';
+                  msg.channel.send("Сообщение от PureAi : "+getit.response.replace(/^(.{1200}[^\s]*).*/, "$1")+" \n"); //Обрезаем текст который больше 1200
+                  toffile=(" \n"+'Date'+msg.createdAt+" \n"+ 'Вопрос: '+" \n"+msg.content+'Ответ: '+llmtext+" \n");
+                  console.log('Записываем в файл....'+" \n");
+            fs.appendFile('./Ailog/ailog.txt',toffile ,(error) => {
+            if (error) {
+            console.error(error);
+            } else {
+            console.log('Записано в file ailog.txt'+" \n");
+               }; 
+               //Обнуляем ответы
+                 getit.response='';
+                 msg.content='';
+               //Обнуляем ответы
+            });
+      };
+      // Запомнить Ollama текст от пользователя
+      async function OllamaRememberText() {
+      const llmtext=msg.content;
+      console.log ('Следующий контент будет запомнен ---> ' +msg.content+" \n");
+      const ollama = new Ollama('http://localhost:11434/api/generate -d', msg.content);    
+           const getit = await ollama.generate({  
+           model:"llama3.1:70b",
+           keep_alive: -1, //          -1 Не выгружать Олламу // если 0 то не держать загруженной // если больше 0 от сколько по времени                                
+           prompt:'Запомни этот текст :'+llmtext,
+           text: llmtext,                              
+           language: "russian",
+           options:{
+           "temperature":0.1,                             
+           "mirostat":1,
+           "mirostat_eta":0.4,
+           "mirostat_tau":2,
+           "num_ctx":1350,
+           "repeat_last_n":128,
+           "top_k":100,
+           "top_p":0.97
+            }
+            });  
+      console.log(msg.content+" \n");                      
+      console.log(getit.response+" \n");                   
+       msg.channel.id='886276495704739930';
+        const TEXT_CHANNEL_ID = '886276495704739930';
+        //msg.channel.send("--> "+msg.content.replace(/^(.{1200}[^\s]*).*/, "$1")+" \n"); //Обрезаем текст который больше 1200
+        msg.channel.send("PureAi --> "+getit.response.replace(/^(.{1200}[^\s]*).*/, "$1")+" \n"); //Обрезаем текст который больше 1200
+       getit.response='';
+       msg.content='';
+      };
+      // Загружаем в Ollama память о предыдущих событиях в чате из текстового файла
+      async function UpploadLlamaMemory() {                             
+      console.log (data1010+ 'ETOKORREKTO!!! ZAGRUSILSA');
+      const ollama = new Ollama('http://localhost:11434/api/chat', data1010);    
+      const getit = await ollama.chat({  
+                 model:"llama3.1:70b",
+                 keep_alive: -1, //          KEEP ALIVE               
+                 prompt: msg.content,                              
+                 language: "russian",
+                 options:{
+                 "temperature":0.1,                             
+                 "mirostat":1,
+                 "mirostat_eta":0.4,
+                 "mirostat_tau":2,
+                 "num_ctx":1350,
+                  "repeat_last_n":128,
+                  "top_k":100,
+                 "top_p":0.97
+                  }
+            });  
+            console.log(msg.content);                      
+            console.log('История загружена из тестового лог - файла. ');
+            console.log('Ответ Ollama ---> '+getit.response);                                                                                                        
+            getit.response='';
+            msg.content='';
+      return;
+      }; 
+      // Функция обработки сообщения Бота
+      function AuthorIsBot () {
+      console.log('Сообщение от Бота под номером : '+nrmsg+' Текст сообщения --->> '+usermsg);
+      var toffile=("Дата/время:"+msg.createdAt+ " Автор: PureAi"+" Cообшение: "+msg.content)+" \n";            
+      fs.appendFile('msgfile.txt',toffile ,(error) => {
+            if (error) {
+            console.error(error);
+            } else {
+            console.log('Data written to file');
+            };    
+            }); 
+      return;
+      };
+            // Расспознавание картинки с Ollamа
+                     async function LlamaImage() {
+                     const nname=msg.id;                     
+                     console.log('Распознавание запущено ...'); 
+                     console.log ('Распознано как картинка -----> '+msg.attachments.contentType === ('image/png')||('image/jpeg'));
+                     const imagease6 = 'A:/PUREAI/pics/pure'+nname+'.jpg';
+
+                  // Распознаем картинку                                                                                  
+                     const ollama = new Ollama('http://localhost:11434/api/generate');   
+                     const getit =await ollama.generate({  
+                        model :"minicpm-v", // "llama3.2-vision:11b-instruct-fp16", Можно использовать разные модели                                    
+                        options:{"temperature":0.1},   // типа Визион или img to text
+                        filePath:imagease6,
+                        language:'russian',
+                        images: [imagease6],
+                        prompt: 'Что изображено на картинке, опиши максимально подробно на русском. Если на картинке есть текст зачитай его. '+ imagease6, 
+                        stream: false                                
+                     }); 
+                  // Распознаем картинку                           
+                  
+                  const masters=getit.response;
+                  // Получили ответ от Ollama в виде текста в переменной masters
+
+                  console.log('Результат распознавания ----> '+ masters);
+                  // Консолим результат
+
+                  // Сохраняем распознанный текст в файл с Датой, названием файла и описанием картинки
+                  console.log('Записываем распознанный текст в файл....');
+                  var toffile=("Дата/время: "+msg.createdAt+" Название файла "+imagease6+" \n"+"Описание распознанной картинки: "+masters)+" \n";            
+                  msg.channel.id='886276495704739930';
+                  const TEXT_CHANNEL_ID = '886276495704739930';
+                  msg.channel.send('Картинка '+"Дата/время: "+msg.createdAt+" Название файла "+imagease6+" \n"+" : "+masters.replace(/^(.{1200}[^\s]*).*/, "$1")+" \n"); //" Cообшение на английском: "+text+" \n"+
+                        fs.appendFile('./Pics/picdescribe.txt',toffile ,(error) => {
+                        if (error) {
+                        console.error(error);
+                        } else {
+                        console.log('Записано в file picdescribe.txt');
+                        getit.response='';
+                        msg.content='';
+                  };    
+                  }); 
+            
+
+            };             
+            // проверяем ID канала в котором отправлено сообщение
+            if (msg.channel.id=='788900287280578574') {
+                  if (msg.attachments.size==0) {
+                         AuthorUserTextSave ();        // Сохранить текст от пользователя в лог файл msgfile.txt                         
+                         AnswerQLlama();               //Ответить на вопрос пользователся                       
+                         OllamaRememberText();         // Запомнить Ollama текст от пользователя          
+                  };
+            };
+      // Проверяем если пользователь ввел код -Озвучи обычным голосом
+      if (msg.content.includes('Озвучи обычным голосом')) { // speakerwav - deva 
+      var voicevar='default';
+      SayVoiceMessage (voicevar);
+      };                             
+
+      // Проверяем если пользователь ввел код -Озвучи женским обычным голосом
+      if (msg.content.includes('Озвучи голосом 0')) { // speakerwav - deva 
+      var voicevar='deva';
+      SayVoiceMessage (voicevar);
+      };                             
+
+      // Проверяем если пользователь ввел код -Озвучи женским нежным голосом
+      if (msg.content.includes('Озвучи голосом 1')) { // speakerwav - Google 
+      var voicevar='Google';
+      SayVoiceMessage (voicevar);
+      };
+
+      // Проверяем если пользователь ввел код -Озвучи голосом Курта
+      if (msg.content.includes('Озвучи голосом 2')) { // speakerwav -  Kurt Cobain
+      var voicevar='Kurt Cobain';
+      SayVoiceMessage (voicevar);
+      };
+
+      // Проверяем если пользователь ввел код -Озвучи голосом из фильмов
+      if (msg.content.includes('Озвучи голосом 3')) { // speakerwav -  grjazniyubliudok
+      let voicevar='grjazniyubliudok';
+      SayVoiceMessage (voicevar);
+      };
+
+                                               //////// КЕЙСЫ ПРОВЕРКИ IF и управление функциями /////////
+                        // Проверяем на то в онлайне или не Толклама
+                        if (msg.content.includes('adamstart!')&&AdamOnline==0) {           
+                              talklamacheckOn ();
+                              AdamOnline=1;
+                        };
+                        if (msg.content.includes('adamstop!')&&AdamOnline==1) {   
+                              talklamacheckOff ();
+                              AdamOnline=0;
+                        };                               
+                              
+                        // Проверяем на то если автор не PureAi
+                        if ((msg.author.bot=='false')) {                    
+                              
+                                 
+                                          AuthorUserTextSave ();    // Сохранить текст от пользователя в лог файл msgfile.txt
+                                          //   OllamaRememberText();     // Запомнить Ollama текст от пользователя
+                                          AnswerQLlama();           //Ответить на вопрос пользователся                                                                        
+                    
+                        };
+                        if ((msg.author.bot==false)&&(msg.content.includes('1299787266939555901')==true)) {                             
+                              AuthorUserTextSave ();        // Сохранить текст от пользователя в лог файл msgfile.txt                         
+                              AnswerQLlama();               //Ответить на вопрос пользователся                       
+                           //   OllamaRememberText();         // Запомнить Ollama текст от пользователя                                                 
+                        };
+                        if (msg.author.bot==true) {
+                              if (msg.content.includes('PureAi')){
+                                    AuthorIsBot();
+                              };
+                        };
+                        // проверяем если отправляется файл
+                        if ((msg.attachments.size>0)) { 
+                              var attachment1 = msg.attachments.first(); //Тогда создаем переменную сначала attachment
+                              console.log('Размер текстового контента ---> '+msg.content.length);
+                              console.log('Размер вложенного файла ---> '+attachment1.size); // Выводим в консоль размер прикрепленного элемента
+                              console.log('Тип вложенного файла ---> '+attachment1.contentType+'-----'+msg.attachments.first().contentType);
+                  
+                              //Проверяем условие если в прикрепленном контейнере аудио файл. И если Да, то выводим текст в консоль и в Дискорд, что это просто аудио файл 
+                              if (((msg.attachments.first().contentType)==('audio/mpeg'))||((msg.attachments.first().contentType)==('audio/ogg'))||((msg.attachments.first().contentType)==('audio/wav'))) { 
+                              console.log('ЭТО ПРОСТО АУДИО ФАЙЛ!!!');
+                              msg.channel.id='886276495704739930';
+                              msg.channel.send('Это просто аудио файл');     //   const TEXT_CHANNEL_ID = '886276495704739930';
+                              };
+                              //Проверяем условие если в прикрепленном контейнере аудио файл. И если Да, то выводим текст в консоль и в Дискорд, что это просто аудио файл
+            
+                              //Проверяем условие если в прикрепленном контейнере файл с картинкой. И если Да, то сохраняем картинку на диск и передаем картинку на расспознавание
+                              if ((msg.attachments.first().contentType)==('image/png')||(msg.attachments.first().contentType)==('image/jpeg')) { //.contentType == ('image/png')||('image/jpeg')
+                                      console.log('Размер текстового контента ---> '+msg.content.length);
+                                      console.log('Размер вложенного файла ---> '+attachment1.size); // Выводим в консоль размер прикрепленного элемента
+                                      console.log('Тип вложенного файла ---> '+attachment1.contentType+'-----'+msg.attachments.first().contentType);
+                                      const nname=msg.id;
+                                      let kalka=0;
+                                       async function download(url){
+                                       const imagease6 = 'A:/PUREAI/pics/pure'+nname+'.jpg'; 
+                                       await new Promise((resolve, reject) => {
+                                          request.get(url)
+                                          .on('error', error => {
+                                          console.error(error);
+                                          reject(error);
+                                          })
+                                          .pipe(fs.createWriteStream(imagease6))
+                                          .on('finish', () => {
+                                          console.log('Вложение сохранено как ----> ' + imagease6);
+                                          resolve();
+                                          LlamaImage();// Расспознавание картинки с Ollamа
+                                          });
+                                       });
+                                      };
+                                    kalka=1;
+                                    download(msg.attachments.first().url);
+                              //Проверяем условие если в прикрепленном контейнере файл с картинкой. И если Да, то сохраняем картинку на диск и передаем картинку на расспознавание
+
+
+                        // Если текстовое сообщение содержит -UPPLOAD MEMORY Загружаем боту историю из текстового файла лога
+                        if (msg.content.includes('UPPLOAD MEMORY')&&(msg.author.bot ==false)&&(msg.attachments.size=0)) { 
+                        console.log('new message REGISTERED IS OKEY!');    
+                        console.log(msg.content);    
+                              UpploadLlamaMemory();
+                        };
+                        // Если текстовое сообщение содержит -UPPLOAD MEMORY Загружаем боту историю из текстового файла лога
+
+     
+
+      // Проверяем автора сообщения и тип сообщения, а так же понимаем, является ли автор основным Ботом Пюре. +
+         
+                  // Сохраняем распознанный текст в файл с Датой, названием файла и описанием картинки
+            };
+            //Проверяем условие если в прикрепленном контейнере файл с картинкой. И если Да, то сохраняем картинку на диск и передаем картинку на расспознавание      
+                  
+      };
+      return;
+});  
+client.login(loginds);
